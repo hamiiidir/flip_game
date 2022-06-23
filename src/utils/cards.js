@@ -1,0 +1,18 @@
+export const cards = [
+    { name: 'product-1', src: '/src/assets/images/product-1.jpg'},
+    { name: 'product-1', src: '/src/assets/images/product-1.jpg'},
+    { name: 'product-2', src: '/src/assets/images/product-2.jpg'},
+    { name: 'product-2', src: '/src/assets/images/product-2.jpg'},
+    { name: 'product-3', src: '/src/assets/images/product-3.jpg'},
+    { name: 'product-3', src: '/src/assets/images/product-3.jpg'},
+    { name: 'product-4', src: '/src/assets/images/product-4.jpg'},
+    { name: 'product-4', src: '/src/assets/images/product-4.jpg'},
+    { name: 'product-5', src: '/src/assets/images/product-5.jpg'},
+    { name: 'product-5', src: '/src/assets/images/product-5.jpg'},
+    { name: 'product-6', src: '/src/assets/images/product-6.jpg'},
+    { name: 'product-6', src: '/src/assets/images/product-6.jpg'},
+    { name: 'product-7', src: '/src/assets/images/product-7.jpg'},
+    { name: 'product-7', src: '/src/assets/images/product-7.jpg'},
+    { name: 'product-8', src: '/src/assets/images/product-8.jpg'},
+    { name: 'product-8', src: '/src/assets/images/product-8.jpg'},
+]
