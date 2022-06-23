@@ -5,6 +5,7 @@ const Main = {
     state () {
       return {
         reset: undefined,
+        startingMinutes: 10
       }
     },
 

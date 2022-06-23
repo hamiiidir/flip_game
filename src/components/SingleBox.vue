@@ -17,16 +17,15 @@ const card = ref()
 
 
 function flipCard(){
-    if (!flipped.value) {
-        flipCardForward()
-    } else {
-        flipCardBack()
-    }
+    if (flipped.value) {
+        return
+    } 
+
+    flipCardForward()
 
     let audio = new Audio('/src/assets/audios/flip-effect.mp3');
-    setTimeout(() => {
-        audio.play();
-    }, 100);       
+
+    audio.play();
 }
 
 function flipCardForward(){
