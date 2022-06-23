@@ -4,15 +4,16 @@ const Main = {
 
     state () {
       return {
-        // ifRequestEverMade: false,
-
+        reset: undefined,
       }
     },
 
     mutations: {
-        // requestIsNotMade (state) {
-        //     state.ifRequestEverMade = false;
-        // },
+        resetTheGame (state: any) {
+            let audio = new Audio('/src/assets/audios/restart.mp3')
+            audio.play()
+            state.reset = Math.random();
+        },
     },
 
     getters: {

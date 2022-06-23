@@ -7,8 +7,11 @@
 
 <script setup>
 import { ref } from "@vue/reactivity"
+import { watch } from "@vue/runtime-core";
+import { useStore } from 'vuex';
 
 const props = defineProps(['index', 'src'])
+const store = useStore();
 const flipped = ref(false)
 const card = ref()
 
@@ -42,8 +45,9 @@ function flipCardBack(){
     }, 100);      
 }
 
-
-
+watch(() => store.state.Main.reset , () => {
+    flipCardBack()
+})
 
 
 </script>
