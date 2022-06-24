@@ -11,14 +11,14 @@ import { ref } from '@vue/reactivity';
 import { onMounted, watch } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 const store = useStore();
-const time = ref(store.state.Main.startingMinutes * 60)
+const time = ref(store.getters['Main/startingSeconds'])
 const minutes = ref()
 const seconds = ref()
 let interval
 
 function updateCountdown(){
-    if (time.value == 0) {
-        store.commit('Main/youAreLooser', 'timeout')
+    if (time.value == 0 && (store.state.Main.matchedCards.length != store.state.Main.cards.length)) {
+        store.dispatch('Main/gameOver', 'timeout')
     }    
 
     updateSecondsAndMinutes()

@@ -8,30 +8,16 @@ const Main = {
       return {
         cards: cards.sort(() => 0.5 - Math.random()),
         resetSensor: Math.random(),
-        startingMinutes: 0.1,
+        startingMinutes: 2,
         timerInterval: undefined,
-        maxPlays: 6,
-        playCounter: 6,
+        maxPlays: 40,
+        playCounter: 40,
         matchCandidates: [],
         matchedCards: []
       }
     },
 
     mutations: {
-        hitResetSensor (state: any) {
-            state.resetSensor = Math.random()
-
-            setTimeout(() => {
-              state.cards.sort(() => 0.5 - Math.random())
-            }, 100);
-
-
-            functions.clearCardsPulse()
-            functions.removeTimerAnimation()
-            functions.removeCounterAnimation()
-            functions.enableCardEvents()
-        },
-
         countDownMaxPlays (state: any) {
           state.playCounter--
         },
@@ -51,43 +37,56 @@ const Main = {
         emptyMatchedCards (state: any, data: any){
           state.matchedCards = []
         },
+    },
 
-        youAreWinner(state: any){
-          const audio = new Audio('/src/assets/audios/winner.mp3')
-          audio.play()
-          state.matchedCards = []
-          clearInterval(state.timerInterval)          
-        },
-
-        youAreLooser(state: any, type: any){
-          let audio = undefined
-          audio = new Audio('/src/assets/audios/looser.mp3')
-
-          if (type == 'timeout') {
-            audio = new Audio('/src/assets/audios/time-out.mp3')
-            functions.addTimerAnimation()
-          } else {
-            functions.addCounterAnimation()
-          }
-
-          audio!.play()
-
-          state.matchedCards = []
-          clearInterval(state.timerInterval)    
-          
-          functions.disableCardEvents()
-        }
-
+    getters: {
+      startingSeconds(state: any){
+        return state.startingMinutes * 60
+      }
     },
 
     actions: {
-      resetGame({commit}: any){
-        commit('hitResetSensor')
+      resetGame({state, commit}: any){
+        state.resetSensor = Math.random()
+
+        setTimeout(() => {
+          state.cards.sort(() => 0.5 - Math.random())
+        }, 100);
+
+        functions.clearCardsPulse()
+        functions.removeTimerAnimation()
+        functions.removeCounterAnimation()
+        functions.enableCardEvents()
+        
         commit('emptyMatchedCards')
         commit('emptyMatchCandidates')
       },
 
-      testMatch({state, commit}: any){
+      victory({state}: any){
+        const audio = new Audio('/src/assets/audios/winner.mp3')
+        audio.play()
+        clearInterval(state.timerInterval)           
+      },
+
+      gameOver({state}: any, type: any){
+        let audio = undefined
+        audio = new Audio('/src/assets/audios/looser.mp3')
+
+        if (type == 'timeout') {
+          audio = new Audio('/src/assets/audios/time-out.mp3')
+          functions.addTimerAnimation()
+        } else {
+          functions.addCounterAnimation()
+        }
+
+        audio!.play()
+
+        clearInterval(state.timerInterval)    
+        
+        functions.disableCardEvents()
+      },
+
+      testMatch({state, commit, dispatch}: any){
         const matched = state.matchCandidates[0].name == state.matchCandidates[1].name
 
         if (!matched) {
@@ -106,8 +105,8 @@ const Main = {
             state.matchCandidates[1].ref
           ])
 
-          if (state.matchedCards.length == 16) {
-            commit('youAreWinner')
+          if (state.matchedCards.length == state.cards.length) {
+            dispatch('victory')
           } else {
             const audio = new Audio('/src/assets/audios/match-success.mp3')
             audio.play();
@@ -119,8 +118,8 @@ const Main = {
 
         functions.enableCardEvents()
 
-        if (state.playCounter == 0) {
-          commit('youAreLooser')
+        if (state.playCounter == 0 && (state.matchedCards.length != state.cards.length)) {
+          dispatch('gameOver')
         }
 
       }
