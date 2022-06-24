@@ -14,7 +14,7 @@
       </div>
 
       <div class="flex justify-start w-full">
-        <button @click="reset()" class="px-14 py-3 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">شروع دوباره</button>
+        <button @click="reset()" id="resetButton" class="invisible px-14 py-3 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">شروع دوباره</button>
       </div>
 
     </div>
@@ -26,12 +26,14 @@
 import SingleBox from './SingleBox.vue'
 import Timer from './Timer.vue'
 import MaxPlayCounter from './MaxPlayCounter.vue'
+import { hideResetButton } from '@/utils/functions'
 import { useStore } from 'vuex';
 
 const store = useStore();
 
 function reset(){
   store.dispatch('Main/resetGame')
+  hideResetButton()
 }
 
 </script>

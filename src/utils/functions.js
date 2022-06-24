@@ -1,3 +1,13 @@
+export function showResetButton(){
+    const button = document.getElementById('resetButton')
+    button.classList.remove('invisible')
+}
+
+export function hideResetButton(){
+    const button = document.getElementById('resetButton')
+    button.classList.add('invisible')
+}
+
 export function disableCardEvents(){
     const allCards = document.querySelectorAll('#card')
 

@@ -10,6 +10,7 @@
 import { ref } from '@vue/reactivity';
 import { onMounted, watch } from '@vue/runtime-core';
 import { useStore } from 'vuex';
+import { disableCardEvents } from '@/utils/functions'
 const store = useStore();
 const time = ref(store.getters['Main/startingSeconds'])
 const minutes = ref()
@@ -18,12 +19,15 @@ let interval
 
 function updateCountdown(){
     if (time.value == 0 && (store.state.Main.matchedCards.length != store.state.Main.cards.length)) {
+        disableCardEvents()
         store.dispatch('Main/gameOver', 'timeout')
     }    
 
     updateSecondsAndMinutes()
 
-    time.value = time.value - 1
+    time.value--
+
+    store.commit('Main/updateTimeCounter', time.value)
 
 }
 
@@ -40,22 +44,23 @@ function updateSecondsAndMinutes(){
 
 onMounted(() => {
     updateCountdown()
-    interval = setInterval(updateCountdown, 1000)
-    store.state.Main.timerInterval = interval
 })
 
-watch(() => store.state.Main.resetSensor, () => {
-    time.value = store.state.Main.startingMinutes * 60
+watch(() => store.state.Main.start, () => {
+    if (store.state.Main.start) {
+        updateSecondsAndMinutes()
+        updateCountdown()
+        interval = setInterval(updateCountdown, 1000)
+        store.commit('Main/setInterval', interval)      
+    }
+})
+
+watch(() => store.state.Main.reset, () => {
+    time.value = store.getters['Main/startingSeconds']
+
     updateSecondsAndMinutes()
 
     clearInterval(store.state.Main.timerInterval)
-
-    updateCountdown()
-
-    setTimeout(() => {
-        interval = setInterval(updateCountdown, 1000)
-        store.state.Main.timerInterval = interval    
-    }, 1);
 })
 
 </script>

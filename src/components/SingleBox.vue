@@ -22,6 +22,8 @@ function flipCard(){
         return
     } 
 
+    store.commit('Main/startTheGame')
+
     store.state.Main.matchCandidates.push({
         name: props.name,
         flipBackFunc: () => flipCardBack(),
@@ -60,7 +62,7 @@ function flipCardBack(){
     }, 100);      
 }
 
-watch(() => store.state.Main.resetSensor, () => {
+watch(() => store.state.Main.reset, () => {
     flipCardBack()
 })
 

@@ -7,8 +7,10 @@ const Main = {
     state () {
       return {
         cards: cards.sort(() => 0.5 - Math.random()),
-        resetSensor: Math.random(),
+        start: false,
+        reset: Math.random(),
         startingMinutes: 2,
+        timeCounter: undefined,
         timerInterval: undefined,
         maxPlays: 40,
         playCounter: 40,
@@ -18,24 +20,42 @@ const Main = {
     },
 
     mutations: {
+        startTheGame (state: any) {
+            if (!state.start) {
+            state.start = true
+            }
+        },
+
+        stopTheGame (state: any) {
+            state.start = false
+        },
+
+        setInterval (state: any, interval: any) {
+            state.timerInterval = interval
+        },
+
+        updateTimeCounter (state: any, count: any) {
+            state.timeCounter = count
+        },
+
         countDownMaxPlays (state: any) {
-          state.playCounter--
+            state.playCounter--
         },
 
         resetPlayCounter (state: any) {
-          state.playCounter = state.maxPlays
+            state.playCounter = state.maxPlays
         },
 
         emptyMatchCandidates (state: any){
-          state.matchCandidates = []
+            state.matchCandidates = []
         },
 
         populateMatchedCards (state: any, data: any){
-          state.matchedCards.push(...data)
+            state.matchedCards.push(...data)
         },
 
         emptyMatchedCards (state: any, data: any){
-          state.matchedCards = []
+            state.matchedCards = []
         },
     },
 
@@ -47,7 +67,8 @@ const Main = {
 
     actions: {
       resetGame({state, commit}: any){
-        state.resetSensor = Math.random()
+        
+        state.reset = Math.random()
 
         setTimeout(() => {
           state.cards.sort(() => 0.5 - Math.random())
@@ -58,6 +79,7 @@ const Main = {
         functions.removeCounterAnimation()
         functions.enableCardEvents()
         
+        commit('stopTheGame')
         commit('emptyMatchedCards')
         commit('emptyMatchCandidates')
       },
@@ -81,47 +103,56 @@ const Main = {
 
         audio!.play()
 
-        clearInterval(state.timerInterval)    
+        clearInterval(state.timerInterval)  
         
-        functions.disableCardEvents()
+        functions.showResetButton()
       },
 
       testMatch({state, commit, dispatch}: any){
         const matched = state.matchCandidates[0].name == state.matchCandidates[1].name
 
-        if (!matched) {
-          state.matchCandidates[0].flipBackFunc()
-          state.matchCandidates[1].flipBackFunc()
+        const refactor = () => {
+            commit('emptyMatchCandidates')
+            if (state.timeCounter > 0 && state.playCounter > 0) {
+                functions.enableCardEvents()
+            }                
+            if (state.playCounter == 0 && (state.matchedCards.length != state.cards.length)) {
+                dispatch('gameOver')
+            }               
+        }
 
-          const audio = new Audio('/src/assets/audios/match-failure.mp3');
-          audio.play();          
+        if (!matched) {
+            setTimeout(() => {
+                state.matchCandidates[0].flipBackFunc()
+                state.matchCandidates[1].flipBackFunc()
+
+                const audio = new Audio('/src/assets/audios/match-failure.mp3');
+                audio.play();  
+                
+                setTimeout(() => {
+                    refactor()
+                }, 100);
+                
+            }, 700);
           
         } else {
-          state.matchCandidates[0].ref.classList.add('animate-pulse-opacity')
-          state.matchCandidates[1].ref.classList.add('animate-pulse-opacity')
+            state.matchCandidates[0].ref.classList.add('animate-pulse-opacity')
+            state.matchCandidates[1].ref.classList.add('animate-pulse-opacity')
 
-          commit('populateMatchedCards', [
-            state.matchCandidates[0].ref,
-            state.matchCandidates[1].ref
-          ])
+            commit('populateMatchedCards', [
+                state.matchCandidates[0].ref,
+                state.matchCandidates[1].ref
+            ])
 
-          if (state.matchedCards.length == state.cards.length) {
-            dispatch('victory')
-          } else {
-            const audio = new Audio('/src/assets/audios/match-success.mp3')
-            audio.play();
-          }
-
+            if (state.matchedCards.length == state.cards.length) {
+                dispatch('victory')
+            } else {
+                const audio = new Audio('/src/assets/audios/match-success.mp3')
+                audio.play();
+            }
+            
+            refactor()
         }
-        
-        commit('emptyMatchCandidates')
-
-        functions.enableCardEvents()
-
-        if (state.playCounter == 0 && (state.matchedCards.length != state.cards.length)) {
-          dispatch('gameOver')
-        }
-
       }
 
     }    

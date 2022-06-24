@@ -8,9 +8,16 @@
 <script setup>
 import { watch } from '@vue/runtime-core';
 import { useStore } from 'vuex';
+import { disableCardEvents } from '@/utils/functions'
 const store = useStore();
 
-watch(() => store.state.Main.resetSensor, () => {
+watch(() => store.state.Main.reset, () => {
     store.commit('Main/resetPlayCounter')
+})
+
+watch(() => store.state.Main.playCounter, () => {
+    if (store.state.Main.playCounter <= 0) {
+        disableCardEvents()
+    }
 })
 </script>
