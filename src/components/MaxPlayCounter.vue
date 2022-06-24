@@ -1,7 +1,7 @@
 <template>
-    <div dir="rtl" class="flex justify-start items-center text-3xl font-bold">
+    <div dir="rtl" id="maxPlayWrapper" class="flex justify-start items-center text-3xl font-bold">
         <div class="ml-2"> تعداد حرکت: </div>
-        <div> {{ store.state.Main.playCounter }} </div>
+        <div id="maxPlayCount"> {{ store.state.Main.playCounter }} </div>
     </div>
 </template>
 

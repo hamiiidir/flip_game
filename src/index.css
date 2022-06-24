@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 
-.animate-custom-pulse {
-    animation: custompulse 2000ms cubic-bezier(0.4, 0, 0.6, 1) 1;
+.animate-pulse-opacity {
+    animation: opacityPulse 2000ms cubic-bezier(0.4, 0, 0.6, 1) 1;
   }
 
-  @keyframes custompulse {
+  @keyframes opacityPulse {
     0% {
       opacity: .3;
     }
@@ -18,3 +18,30 @@
       opacity: 1;
     }
   }
+
+
+  .animate-pulse-translate	{
+    animation: opacityTranslate 100ms cubic-bezier(0.4, 0, 0.6, 1) 1ms 15;
+  }
+
+  @keyframes opacityTranslate {
+    25% {
+      transform: translateX(5px);
+    }
+    75% {
+      transform: translateX(-5px);
+    }
+  } 
+
+  .animate-pulse-scale	{
+    animation: scaleTranslate 2000ms cubic-bezier(0.4, 0, 0.6, 1) 1ms infinite;
+  }
+
+  @keyframes scaleTranslate {
+    50% {
+      transform: scale(1.5);
+    }
+    75% {
+      transform: translateX(0.9);
+    }
+  } 

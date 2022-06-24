@@ -1,14 +1,17 @@
+import { cards } from '@/utils/cards'
+import * as functions from '@/utils/functions'
 
 const Main = {
   namespaced: true,
 
     state () {
       return {
+        cards: cards.sort(() => 0.5 - Math.random()),
         resetSensor: Math.random(),
-        startingMinutes: 10,
+        startingMinutes: 0.1,
         timerInterval: undefined,
-        maxPlays: 40,
-        playCounter: 40,
+        maxPlays: 6,
+        playCounter: 6,
         matchCandidates: [],
         matchedCards: []
       }
@@ -18,12 +21,15 @@ const Main = {
         hitResetSensor (state: any) {
             state.resetSensor = Math.random()
 
-            const allCards = document.querySelectorAll('#card')
+            setTimeout(() => {
+              state.cards.sort(() => 0.5 - Math.random())
+            }, 100);
 
-            allCards.forEach(item => {
-              item.classList.remove('animate-custom-pulse')
-            });
-            
+
+            functions.clearCardsPulse()
+            functions.removeTimerAnimation()
+            functions.removeCounterAnimation()
+            functions.enableCardEvents()
         },
 
         countDownMaxPlays (state: any) {
@@ -44,11 +50,43 @@ const Main = {
 
         emptyMatchedCards (state: any, data: any){
           state.matchedCards = []
+        },
+
+        youAreWinner(state: any){
+          const audio = new Audio('/src/assets/audios/winner.mp3')
+          audio.play()
+          state.matchedCards = []
+          clearInterval(state.timerInterval)          
+        },
+
+        youAreLooser(state: any, type: any){
+          let audio = undefined
+          audio = new Audio('/src/assets/audios/looser.mp3')
+
+          if (type == 'timeout') {
+            audio = new Audio('/src/assets/audios/time-out.mp3')
+            functions.addTimerAnimation()
+          } else {
+            functions.addCounterAnimation()
+          }
+
+          audio!.play()
+
+          state.matchedCards = []
+          clearInterval(state.timerInterval)    
+          
+          functions.disableCardEvents()
         }
 
     },
 
     actions: {
+      resetGame({commit}: any){
+        commit('hitResetSensor')
+        commit('emptyMatchedCards')
+        commit('emptyMatchCandidates')
+      },
+
       testMatch({state, commit}: any){
         const matched = state.matchCandidates[0].name == state.matchCandidates[1].name
 
@@ -60,28 +98,31 @@ const Main = {
           audio.play();          
           
         } else {
-          state.matchCandidates[0].ref.classList.add('animate-custom-pulse')
-          state.matchCandidates[1].ref.classList.add('animate-custom-pulse')
+          state.matchCandidates[0].ref.classList.add('animate-pulse-opacity')
+          state.matchCandidates[1].ref.classList.add('animate-pulse-opacity')
 
           commit('populateMatchedCards', [
             state.matchCandidates[0].ref,
             state.matchCandidates[1].ref
           ])
 
-          let audio
-
           if (state.matchedCards.length == 16) {
-            audio = new Audio('/src/assets/audios/winner.mp3')
-            commit('emptyMatchedCards')
-            clearInterval(state.timerInterval)
+            commit('youAreWinner')
           } else {
-            audio = new Audio('/src/assets/audios/match-success.mp3')
+            const audio = new Audio('/src/assets/audios/match-success.mp3')
+            audio.play();
           }
 
-          audio!.play();
         }
         
         commit('emptyMatchCandidates')
+
+        functions.enableCardEvents()
+
+        if (state.playCounter == 0) {
+          commit('youAreLooser')
+        }
+
       }
 
     }    

@@ -9,6 +9,7 @@
 import { ref } from "@vue/reactivity"
 import { watch } from "@vue/runtime-core";
 import { useStore } from 'vuex';
+import { disableCardEvents } from '@/utils/functions'
 
 const props = defineProps(['index', 'src', 'name'])
 const store = useStore();
@@ -28,6 +29,7 @@ function flipCard(){
     })
 
     if (store.state.Main.matchCandidates.length === 2) {
+        disableCardEvents()
         setTimeout(() => {
             store.dispatch('Main/testMatch');
         }, 300);

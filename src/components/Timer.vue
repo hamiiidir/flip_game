@@ -1,5 +1,5 @@
 <template>
-    <div dir="rtl" class="flex items-center text-3xl font-bold">
+    <div dir="rtl" id="timer" class="flex items-center text-3xl font-bold">
         <div class="ml-3">زمان</div>
         <div>{{ seconds }}: </div>
         <div>{{ minutes }}</div>
@@ -18,7 +18,7 @@ let interval
 
 function updateCountdown(){
     if (time.value == 0) {
-        clearInterval(interval)
+        store.commit('Main/youAreLooser', 'timeout')
     }    
 
     updateSecondsAndMinutes()
@@ -47,6 +47,15 @@ onMounted(() => {
 watch(() => store.state.Main.resetSensor, () => {
     time.value = store.state.Main.startingMinutes * 60
     updateSecondsAndMinutes()
+
+    clearInterval(store.state.Main.timerInterval)
+
+    updateCountdown()
+
+    setTimeout(() => {
+        interval = setInterval(updateCountdown, 1000)
+        store.state.Main.timerInterval = interval    
+    }, 1);
 })
 
 </script>
