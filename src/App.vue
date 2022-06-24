@@ -1,10 +1,81 @@
 <template>
-  <game />
+  <div class="flex flex-col justify-center items-center w-full h-screen">
+    <transition name="default">
+        <component :is="activeContainer"></component>
+    </transition>    
+
+    <div class="flex justify-start items-center w-2/3 h-auto lg:w-132">
+      <button v-if="!ifSettings" @click="showSettings()" class="py-3 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">تنظیمات</button>
+      <button v-else @click="showGame()" class="py-3 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">بازی</button>
+      <button @click="reset()" id="resetButton" class="invisible py-3 ml-6 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">شروع دوباره</button>
+    </div>
+
+  </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import Game from './components/Game.vue'
+  import Settings from './components/Settings.vue'
+  import { hideResetButton } from '@/utils/functions'
+  import { useStore } from 'vuex';
+  import { ref, shallowRef } from '@vue/reactivity';
+  import { onMounted } from '@vue/runtime-core';
+  const activeContainer = shallowRef()
+  const ifSettings = ref(false)
+
+  const store = useStore();
+
+  function showSettings(){
+    activeContainer.value = Settings
+    ifSettings.value = true
+    hideResetButton()
+  }
+
+  function showGame(){
+    activeContainer.value = Game
+    ifSettings.value = false
+
+    setTimeout(() => {
+      reset()
+    }, 10);
+  }
+
+  function reset(){
+    store.dispatch('Main/resetGame')
+    hideResetButton()
+  }
+
+  onMounted(() => {
+    activeContainer.value = Game
+  })
 
 </script>
+
+
+<style scope>
+.default-enter-from {
+    opacity: 0
+}
+
+.default-enter-active {
+    transition: opacity 800ms
+}
+
+.default-enter-to {
+    opacity: 1;
+}
+
+.default-leave-from {
+    opacity: 0;
+}
+
+.default-leave-active {
+    transition: opacity 0ms
+}
+
+.default-leave-to {
+    opacity: 0
+}
+</style>
 
 

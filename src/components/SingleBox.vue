@@ -44,6 +44,10 @@ function flipCard(){
     const audio = new Audio('/src/assets/audios/flip-effect.mp3');
 
     audio.play();
+
+    if (store.state.Main.playCounter == 0 && (store.state.Main.matchedCards.length != store.state.Main.cards.length) && store.state.Main.matchCandidates.length === 1) {
+        store.dispatch('Main/gameOver')
+    }     
 }
 
 function flipCardForward(){

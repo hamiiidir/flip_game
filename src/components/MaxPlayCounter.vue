@@ -6,10 +6,14 @@
 </template>
 
 <script setup>
-import { watch } from '@vue/runtime-core';
+import { onMounted, watch } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 import { disableCardEvents } from '@/utils/functions'
 const store = useStore();
+
+onMounted(() => {
+    store.state.Main.playCounter = store.state.Main.maxPlays
+})
 
 watch(() => store.state.Main.reset, () => {
     store.commit('Main/resetPlayCounter')
