@@ -6,9 +6,13 @@
             <label class="flex-shrink-0 text-3xl font-semibold ml-6">زمان بازی</label>
             <input type="text" v-model="store.state.Main.startingMinutes" class="flex-shrink-0 h-12 w-1/2 px-4 text-3xl font-semibold border border-slate-400 focus:outline-none rounded">
         </div>
-        <div class="flex justify-between items-center w-full px-20">
+        <div class="flex justify-between items-center w-full px-20 mb-6">
             <label class="flex-shrink-0 text-3xl font-semibold ml-6">تعداد حرکت</label>
             <input type="text" v-model="store.state.Main.maxPlays" class="flex-shrink-0 h-12 w-1/2 px-4 text-3xl font-semibold border border-slate-400 focus:outline-none rounded">
+        </div>
+        <div class="flex justify-between items-center w-full px-20">
+            <label class="flex-shrink-0 text-3xl font-semibold ml-6">تعداد کمک</label>
+            <input type="text" v-model="store.state.Main.maxGuide" class="flex-shrink-0 h-12 w-1/2 px-4 text-3xl font-semibold border border-slate-400 focus:outline-none rounded">
         </div>
     </div>
 

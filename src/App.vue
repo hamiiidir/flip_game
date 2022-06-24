@@ -7,7 +7,10 @@
     <div class="flex justify-start items-center w-2/3 h-auto lg:w-132">
       <button v-if="!ifSettings" @click="showSettings()" class="py-3 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">تنظیمات</button>
       <button v-else @click="showGame()" class="py-3 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">بازی</button>
-      <button @click="showGuide()" id="resetButton" class="py-3 ml-6 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">راهنمایی</button>
+      <button v-if="!ifSettings" @click="showGuide()" id="showGuide" class="flex justify-center items-center py-3 ml-6 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">
+        <span> ({{ store.state.Main.guideCounter }}) </span>
+        <span class="ml-1">راهنمایی</span>
+      </button>
       <button @click="reset()" id="resetButton" class="invisible py-3 ml-6 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">شروع دوباره</button>
     </div>
 
@@ -17,10 +20,10 @@
 <script setup>
   import Game from './components/Game.vue'
   import Settings from './components/Settings.vue'
-  import { hideResetButton, shakeAllCards, shakeSingleCard } from '@/utils/functions'
+  import { hideResetButton, shakeAllCandidateCards, shakeSingleCard, showGuideButton } from '@/utils/functions'
   import { useStore } from 'vuex';
   import { ref, shallowRef } from '@vue/reactivity';
-  import { onMounted } from '@vue/runtime-core';
+  import { onMounted, watch } from '@vue/runtime-core';
   const activeContainer = shallowRef()
   const ifSettings = ref(false)
 
@@ -43,10 +46,15 @@
 
   function reset(){
     store.dispatch('Main/resetGame')
+    showGuideButton()
     hideResetButton()
   }
 
   function showGuide(){
+    if (store.state.Main.guideCounter <= 0) {
+      return
+    }
+
     const matchCandidates = store.state.Main.matchCandidates
     const cards = store.state.Main.cards
 
@@ -59,12 +67,18 @@
       const matchElementParent = matchElement.parentElement
 
       shakeSingleCard(matchElementParent)
+
+      store.commit('Main/countDownMaxGuide')
       
     } else if (matchCandidates.length == 0) {
-      shakeAllCards()
+      shakeAllCandidateCards()
     }
 
   }
+
+  watch(() => store.state.Main.reset, () => {
+    store.commit('Main/resetGuideCounter')
+  })
 
   onMounted(() => {
     activeContainer.value = Game

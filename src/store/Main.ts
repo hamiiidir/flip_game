@@ -14,6 +14,8 @@ const Main = {
         timerInterval: undefined,
         maxPlays: 40,
         playCounter: 40,
+        maxGuide: 3,
+        guideCounter: 3,
         matchCandidates: [],
         matchedCards: []
       }
@@ -44,6 +46,14 @@ const Main = {
 
         resetPlayCounter (state: any) {
             state.playCounter = state.maxPlays
+        },
+
+        countDownMaxGuide (state: any) {
+            state.guideCounter--
+        },
+
+        resetGuideCounter (state: any) {
+            state.guideCounter = state.maxGuide
         },
 
         emptyMatchCandidates (state: any){
@@ -78,6 +88,7 @@ const Main = {
         functions.removeTimerAnimation()
         functions.removeCounterAnimation()
         functions.enableCardEvents()
+        functions.addCandidateAttributeToWrappers()
         
         commit('stopTheGame')
         commit('emptyMatchedCards')
@@ -106,6 +117,7 @@ const Main = {
         clearInterval(state.timerInterval)  
         
         functions.showResetButton()
+        functions.hideGuideButton()
       },
 
       testMatch({state, commit, dispatch}: any){

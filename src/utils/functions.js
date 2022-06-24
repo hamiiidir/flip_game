@@ -8,6 +8,16 @@ export function hideResetButton(){
     button.classList.add('invisible')
 }
 
+export function showGuideButton(){
+    const button = document.getElementById('showGuide')
+    button.classList.remove('hidden')
+}
+
+export function hideGuideButton(){
+    const button = document.getElementById('showGuide')
+    button.classList.add('hidden')
+}
+
 export function disableCardEvents(){
     const allCards = document.querySelectorAll('#card')
 
@@ -58,7 +68,7 @@ export function removeCounterAnimation(){
     maxPlayCount.classList.remove('animate-pulse-scale')
 }
 
-export function shakeAllCards(){
+export function shakeAllCandidateCards(){
     const allCards = document.querySelectorAll('#cardWrapper[candidate]')
     const audio = new Audio('/src/assets/audios/shake.mp3');
 
@@ -84,5 +94,12 @@ export function shakeSingleCard(element){
     setTimeout(() => {
         element.classList.remove('animate-pulse-rotate')
     }, 410)    
+}
 
+export function addCandidateAttributeToWrappers(){
+    const allWrappers = document.querySelectorAll('#cardWrapper') 
+    
+    allWrappers.forEach(item => {
+        item.setAttribute('candidate', '')
+    });      
 }
