@@ -1,5 +1,5 @@
 <template>
-    <div ref="card" @click="flipCard()" class="flex justify-center items-center w-full h-full bg-cyan-400 transition ease-in-out duration-300 cursor-pointer">
+    <div ref="card" @click="flipCard()" id="card" class="flex justify-center items-center w-full h-full bg-cyan-400 transition ease-in-out duration-300 cursor-pointer">
         <img v-if="flipped" :src="src" alt="" class="w-auto h-auto">
         <div v-else>{{ index }}</div>
     </div>
@@ -10,7 +10,7 @@ import { ref } from "@vue/reactivity"
 import { watch } from "@vue/runtime-core";
 import { useStore } from 'vuex';
 
-const props = defineProps(['index', 'src'])
+const props = defineProps(['index', 'src', 'name'])
 const store = useStore();
 const flipped = ref(false)
 const card = ref()
@@ -21,11 +21,23 @@ function flipCard(){
         return
     } 
 
+    store.state.Main.matchCandidates.push({
+        name: props.name,
+        flipBackFunc: () => flipCardBack(),
+        ref: card
+    })
+
+    if (store.state.Main.matchCandidates.length === 2) {
+        setTimeout(() => {
+            store.dispatch('Main/testMatch');
+        }, 300);
+    }    
+
     store.commit('Main/countDownMaxPlays')
 
     flipCardForward()
 
-    let audio = new Audio('/src/assets/audios/flip-effect.mp3');
+    const audio = new Audio('/src/assets/audios/flip-effect.mp3');
 
     audio.play();
 }

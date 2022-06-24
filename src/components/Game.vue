@@ -9,13 +9,15 @@
 
       <div class="grid grid-cols-4 grid-rows-4 gap-4 mb-14 w-full h-auto">
         <div v-for="(item, index) in cards" :key="index" class="flex justify-center items-center border h-28 rounded-md overflow-hidden text-2xl font-semibold">
-          <single-box :index="index" :src="item.src"/>
+          <single-box :index="index" :src="item.src" :name="item.name"/>
         </div>
       </div>
 
       <div class="flex justify-start w-full">
         <button @click="reset()" class="px-14 py-3 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">شروع دوباره</button>
       </div>
+
+
     </div>
 
   </div>

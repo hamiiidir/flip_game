@@ -41,6 +41,7 @@ function updateSecondsAndMinutes(){
 onMounted(() => {
     updateCountdown()
     interval = setInterval(updateCountdown, 1000)
+    store.state.Main.timerInterval = interval
 })
 
 watch(() => store.state.Main.resetSensor, () => {
