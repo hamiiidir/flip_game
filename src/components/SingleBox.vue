@@ -21,6 +21,8 @@ function flipCard(){
         return
     } 
 
+    store.commit('Main/countDownMaxPlays')
+
     flipCardForward()
 
     let audio = new Audio('/src/assets/audios/flip-effect.mp3');
@@ -44,7 +46,7 @@ function flipCardBack(){
     }, 100);      
 }
 
-watch(() => store.state.Main.reset , () => {
+watch(() => store.state.Main.resetSensor, () => {
     flipCardBack()
 })
 

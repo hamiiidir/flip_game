@@ -4,37 +4,31 @@ const Main = {
 
     state () {
       return {
-        reset: undefined,
-        startingMinutes: 10
+        resetSensor: Math.random(),
+        startingMinutes: 10,
+        maxPlays: 40,
+        playCounter: 40
       }
     },
 
     mutations: {
-        resetTheGame (state: any) {
-            let audio = new Audio('/src/assets/audios/restart.mp3')
-            audio.play()
-            state.reset = Math.random();
+        hitResetSensor (state: any) {
+            state.resetSensor = Math.random()
         },
-    },
 
-    getters: {
-        // ifSessionExpired (state) {
-        //     const sessionElapsedTime = Date.now() - state.lastActivity; 
-        //     // console.log(sessionElapsedTime - state.sessionExpirationTime);
-        //     return sessionElapsedTime >= state.sessionExpirationTime ? true : false;
-        // },
+        countDownMaxPlays (state: any) {
+          state.playCounter--
+        },
+
+        resetPlayCounter (state: any) {
+          state.playCounter = state.maxPlays
+        }
+
+
     },
 
     actions: {
-        // allStatesDefault({commit}) {
-        //     commit('requestIsNotMade');
-        //     commit('sessionExpired');
-        //     commit('authenticatedUserAbsent');
-        //     commit('authenticatedAdminAbsent');
-        //     commit('unsetlastActivity');
-        //     commit('unsetSessionExpirationTime');
-        //     commit('unsetGuard');
-        // },
+
 
     }    
 

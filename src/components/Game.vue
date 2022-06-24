@@ -2,8 +2,9 @@
   <div class="flex justify-center items-center w-full h-screen">
 
     <div class="flex flex-col justify-center items-center w-2/3 h-auto lg:w-132">
-      <div class="flex justify-start w-full mb-8">
+      <div class="flex justify-between items-end w-full mb-8">
         <timer />
+        <max-play-counter />
       </div>
 
       <div class="grid grid-cols-4 grid-rows-4 gap-4 mb-14 w-full h-auto">
@@ -24,12 +25,13 @@
 import { cards } from '@/utils/cards'
 import SingleBox from './SingleBox.vue'
 import Timer from './Timer.vue'
+import MaxPlayCounter from './MaxPlayCounter.vue'
 import { useStore } from 'vuex';
 
 const store = useStore();
 
 function reset(){
-  store.commit('Main/resetTheGame');
+  store.commit('Main/hitResetSensor')
 }
 
 </script>
