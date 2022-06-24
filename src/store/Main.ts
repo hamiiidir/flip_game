@@ -139,6 +139,9 @@ const Main = {
             state.matchCandidates[0].ref.classList.add('animate-pulse-opacity')
             state.matchCandidates[1].ref.classList.add('animate-pulse-opacity')
 
+            state.matchCandidates[0].ref.parentElement.removeAttribute('candidate')
+            state.matchCandidates[1].ref.parentElement.removeAttribute('candidate')
+
             commit('populateMatchedCards', [
                 state.matchCandidates[0].ref,
                 state.matchCandidates[1].ref

@@ -57,3 +57,32 @@ export function removeCounterAnimation(){
     maxPlayWrapper.classList.remove('text-yellow-500')
     maxPlayCount.classList.remove('animate-pulse-scale')
 }
+
+export function shakeAllCards(){
+    const allCards = document.querySelectorAll('#cardWrapper[candidate]')
+    const audio = new Audio('/src/assets/audios/shake.mp3');
+
+    allCards.forEach(item => {
+      item.classList.add('animate-pulse-rotate')
+    });      
+
+    audio.play()
+
+    setTimeout(() => {
+        allCards.forEach(item => {
+          item.classList.remove('animate-pulse-rotate')
+        });      
+    }, 410);
+}
+
+export function shakeSingleCard(element){
+    const audio = new Audio('/src/assets/audios/shake.mp3');
+    audio.play()   
+
+    element.classList.add('animate-pulse-rotate')
+
+    setTimeout(() => {
+        element.classList.remove('animate-pulse-rotate')
+    }, 410)    
+
+}

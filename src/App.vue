@@ -7,6 +7,7 @@
     <div class="flex justify-start items-center w-2/3 h-auto lg:w-132">
       <button v-if="!ifSettings" @click="showSettings()" class="py-3 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">تنظیمات</button>
       <button v-else @click="showGame()" class="py-3 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">بازی</button>
+      <button @click="showGuide()" id="resetButton" class="py-3 ml-6 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">راهنمایی</button>
       <button @click="reset()" id="resetButton" class="invisible py-3 ml-6 w-1/4 font-semibold bg-yellow-400 hover:bg-yellow-300 rounded-md cursor-pointer shadown">شروع دوباره</button>
     </div>
 
@@ -16,7 +17,7 @@
 <script setup>
   import Game from './components/Game.vue'
   import Settings from './components/Settings.vue'
-  import { hideResetButton } from '@/utils/functions'
+  import { hideResetButton, shakeAllCards, shakeSingleCard } from '@/utils/functions'
   import { useStore } from 'vuex';
   import { ref, shallowRef } from '@vue/reactivity';
   import { onMounted } from '@vue/runtime-core';
@@ -43,6 +44,26 @@
   function reset(){
     store.dispatch('Main/resetGame')
     hideResetButton()
+  }
+
+  function showGuide(){
+    const matchCandidates = store.state.Main.matchCandidates
+    const cards = store.state.Main.cards
+
+    if (matchCandidates.length == 1) {
+      const match = cards.filter((item) => {
+        return (item.name == matchCandidates[0].name) && (item.id != matchCandidates[0].id)
+      })
+
+      const matchElement = document.querySelector(`#card[index="${match[0].id}"]`)
+      const matchElementParent = matchElement.parentElement
+
+      shakeSingleCard(matchElementParent)
+      
+    } else if (matchCandidates.length == 0) {
+      shakeAllCards()
+    }
+
   }
 
   onMounted(() => {

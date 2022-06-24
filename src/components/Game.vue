@@ -8,8 +8,8 @@
       </div>
 
       <div class="grid grid-cols-4 grid-rows-4 gap-4 mb-14 w-full h-auto">
-        <div v-for="(item, index) in store.state.Main.cards" :key="index" class="flex justify-center items-center border h-28 rounded-md overflow-hidden text-2xl font-semibold">
-          <single-box :index="index" :src="item.src" :name="item.name"/>
+        <div v-for="(item, index) in store.state.Main.cards" :key="index" candidate id="cardWrapper" class="flex justify-center items-center h-28 rounded-md overflow-hidden text-2xl font-semibold">
+          <single-box :index="index" :id="item.id" :src="item.src" :name="item.name"/>
         </div>
       </div>
 
