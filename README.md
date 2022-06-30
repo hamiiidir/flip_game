@@ -15,4 +15,5 @@ npm install
 npm run dev
 ````
 
-[memory-game](https://raw.githubusercontent.com/hamiiidir/memory_game/main/memory_game.png)
+<img src="https://raw.githubusercontent.com/hamiiidir/memory_game/main/memory_game.png />
+
